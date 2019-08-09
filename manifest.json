@@ -1,0 +1,8 @@
+{
+  "domain": "mylar",
+  "name": "Mylar",
+  "documentation": "https://www.home-assistant.io/components/mylar",
+  "requirements": [],
+  "dependencies": [],
+  "codeowners": ["@darksir23"]
+}
