@@ -23,6 +23,7 @@ Mylar's upcoming comics and recent activity.</br>
 | days | 60 | no | How many days to look back for the history sensor.
 | ssl | false | no | Whether or not to use SSL for Mylar.
 | max | 5 | no | Max number of items in sensor (For Upcoming Media Card only).
+} monitored_conditions| history | no | A list of any of the following: history, upcoming, detailed_history, detailed_upcoming.  The detailed versions require the Upcoming Media Card component.
 </br>
 
 **Do not just copy examples, please use config options above to build your own!**
@@ -38,6 +39,9 @@ sensor:
   days: 30
   ssl: true
   max: 10
+  monitored_conditions:
+    - detailed_upcoming
+    - detailed_history
 ```
 
 ### Sample for ui-lovelace.yaml:
