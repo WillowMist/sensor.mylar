@@ -22,7 +22,6 @@ Mylar's upcoming comics and recent activity.</br>
 | urlbase | / | no | The base URL Mylar is running under.
 | days | 60 | no | How many days to look back for the history sensor.
 | ssl | false | no | Whether or not to use SSL for Mylar.
-| max | 5 | no | Max number of items in sensor (For Upcoming Media Card only).
 } monitored_conditions| history | no | A list of any of the following: history, upcoming, detailed_history, detailed_upcoming.  The detailed versions require the Upcoming Media Card component.
 </br>
 
@@ -38,7 +37,6 @@ sensor:
   port: 8090
   days: 30
   ssl: true
-  max: 10
   monitored_conditions:
     - detailed_upcoming
     - detailed_history
@@ -57,7 +55,7 @@ sensor:
 | --- | --- | --- |
 | title | $title | "Captain Hickenbottom #454" |
 | line1 | $episode | "Rise of the Secret Skull" |
-| line2 | $release | "Wednesday, August 07, 2019" for detailed_upcoming and "4d9h ago" fir detailed_history |
+| line2 | $release | "Wednesday, August 07, 2019" for detailed_upcoming and "4d9h ago" for detailed_history |
 | line3 | $empty | blank spacer line |
 | line4 | $genres | For detailed_history, contains the status, eg "Snatched" or "Post-Processed"
 | icon | mdi:arrow-down-bold | https://materialdesignicons.com/icon/arrow-down-bold
