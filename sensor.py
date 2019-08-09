@@ -299,12 +299,11 @@ def get_cvdata(apikey, issueid=None, volumeid=None, issuenumber=None):
         _LOGGER.info("Data: %s" % cvdata)
         if 'results' in cvdata.keys() and len(cvdata['results']):
             data = cvdata['results'][0]
-            data['cvurl'] = cvurl
             return data
 
     else:
         _LOGGER.info("Failed: %s" % cvres.status_code)
-    return {'cvurl': cvurl, 'cvres': cvres.status_code}
+    return {}
 
 
 TIME_STRINGS = {

@@ -7,7 +7,7 @@ Mylar's upcoming comics and recent activity.</br>
 
 ## Installation:
 
-1. Install this component by copying [these files](https://github.com/DarkSir23/sensor.mylar/tree/master/custom_components/sonarr_upcoming_media) to `/custom_components/mylar/`.
+1. Install this component by copying [these files](https://github.com/DarkSir23/sensor.mylar/tree/master) to `/custom_components/mylar/`.
 2. (Optional) Install the card: [Upcoming Media Card](https://github.com/custom-cards/upcoming-media-card)
 3. Add the code to your `configuration.yaml` using the config options below.
 4. Add the code for the card to your `ui-lovelace.yaml`. 
@@ -32,6 +32,7 @@ Mylar's upcoming comics and recent activity.</br>
 sensor:
 - platform: mylar
   api_key: YOUR_API_KEY
+  cv_api_key: YOUR_COMICVINE_API_KEY
   host: 192.168.1.4
   port: 8090
   days: 30
