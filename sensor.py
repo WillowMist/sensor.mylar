@@ -24,6 +24,7 @@ from homeassistant.helpers.entity import Entity
 
 _LOGGER = logging.getLogger(__name__)
 
+CONF_FINISHED_ONLY = "finished_only"
 CONF_DAYS = "days"
 CONF_INCLUDED = "include_paths"
 CONF_UNIT = "unit"
@@ -35,6 +36,7 @@ DEFAULT_HOST = "localhost"
 DEFAULT_PORT = 8090
 DEFAULT_URLBASE = ""
 DEFAULT_UNIT = "MB"
+DEFAULT_FINISHED_ONLY = "false"
 
 SENSOR_TYPES = {
     "history": ["History", "Items", "mdi:history"],
@@ -64,6 +66,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
         vol.Optional(CONF_SSL, default=False): cv.boolean,
         vol.Optional(CONF_URLBASE, default=DEFAULT_URLBASE): cv.string,
         vol.Optional(CONF_DAYS, default=DEFAULT_DAYS): cv.string,
+        vol.Optional(CONF_FINISHED_ONLY, default=DEFAULT_FINISHED_ONLY): cv.boolean,
     }
 )
 
@@ -90,6 +93,7 @@ class MylarSensor(Entity):
         self.apikey = conf.get(CONF_API_KEY)
         self.cvapikey = conf.get(CONF_CV_API_KEY)
         self.included = conf.get(CONF_INCLUDED)
+        self.finished_only = conf.get(CONF_FINISHED_ONLY)
         self.days = int(conf.get(CONF_DAYS))
         self.ssl = "s" if conf.get(CONF_SSL) else ""
         self._state = None
@@ -231,15 +235,19 @@ class MylarSensor(Entity):
                         d = datetime.datetime.strptime(entry["DateAdded"], "%Y-%m-%d %H:%M:%S")
                         agedelta = now - d
                         if agedelta.days <= self.days:
-                            if self.type == "detailed_history":
-                                issueid = entry['IssueID'] if 'IssueID' in entry.keys() else None
-                                if issueid in cache.keys():
-                                    cvdata = cache[issueid]
-                                else:
-                                    cvdata = get_cvdata(self.cvapikey, issueid=issueid)
-                                    cache[issueid] = cvdata
-                                entry['cvdata'] = cvdata
-                            self.data.append(entry)
+                            if self.finished_only and entry['Status'] == 'Snatched':
+                                pass
+                            else:
+                                if self.type == "detailed_history":
+
+                                    issueid = entry['IssueID'] if 'IssueID' in entry.keys() else None
+                                    if issueid in cache.keys():
+                                        cvdata = cache[issueid]
+                                    else:
+                                        cvdata = get_cvdata(self.cvapikey, issueid=issueid)
+                                        cache[issueid] = cvdata
+                                    entry['cvdata'] = cvdata
+                                self.data.append(entry)
                     except Exception as e:
                         _LOGGER.error("Error: %s\nEntry: %s" % (e, entry))
                 self._state = len(self.data)
