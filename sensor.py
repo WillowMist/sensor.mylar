@@ -155,7 +155,7 @@ class MylarSensor(Entity):
             for entry in self.data:
                 card_item = {}
                 if 'image' in entry['cvdata']:
-                    card_item['poster'] = entry['cvdata']['image']['thumb_url']
+                    card_item['poster'] = entry['cvdata']['image']['small_url']
                 else:
                     card_item['poster'] = 'https://via.placeholder.com/121x160?text=Image+not+found'
                 d = datetime.datetime.strptime(entry["DateAdded"], "%Y-%m-%d %H:%M:%S")
@@ -182,7 +182,7 @@ class MylarSensor(Entity):
             for entry in self.data:
                 card_item = {}
                 if 'image' in entry['cvdata']:
-                    card_item['poster'] = entry['cvdata']['image']['thumb_url']
+                    card_item['poster'] = entry['cvdata']['image']['small_url']
                 else:
                     card_item['poster'] = 'https://via.placeholder.com/121x160?text=Image+not+found'
                 card_item['episode'] = entry['cvdata']['name'] if 'name' in entry['cvdata'] else ''
