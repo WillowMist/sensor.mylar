@@ -23,7 +23,7 @@ Mylar's upcoming comics and recent activity.</br>
 | days | 60 | no | How many days to look back for the history sensor.
 | ssl | false | no | Whether or not to use SSL for Mylar.
 | finished_only | false | no | If true, Hide "Snatched" entries in history sensors.
-| monitored_conditions| history | no | A list of any of the following: history, upcoming, detailed_history, detailed_upcoming.  The detailed versions require the Upcoming Media Card component.
+| monitored_conditions | history | no | A list of any of the following: history, upcoming, detailed_history, detailed_upcoming.  The detailed versions require the Upcoming Media Card component.
 </br>
 
 **Do not just copy examples, please use config options above to build your own!**

@@ -161,7 +161,7 @@ class MylarSensor(Entity):
                 if 'image' in entry['cvdata']:
                     card_item['poster'] = entry['cvdata']['image']['small_url']
                 else:
-                    card_item['poster'] = 'https://via.placeholder.com/121x160?text=Image+not+found'
+                    card_item['poster'] = 'https://via.placeholder.com/200x200?text=Image+not+found'
                 d = datetime.datetime.strptime(entry["DateAdded"], "%Y-%m-%d %H:%M:%S")
                 card_item['airdate'] = d.isoformat()
                 card_item['title'] = '%s #%s' % (entry['ComicName'], entry['Issue_Number'])
@@ -188,7 +188,7 @@ class MylarSensor(Entity):
                 if 'image' in entry['cvdata']:
                     card_item['poster'] = entry['cvdata']['image']['small_url']
                 else:
-                    card_item['poster'] = 'https://via.placeholder.com/121x160?text=Image+not+found'
+                    card_item['poster'] = 'https://via.placeholder.com/200x200?text=No+Image+Yet'
                 card_item['episode'] = entry['cvdata']['name'] if 'name' in entry['cvdata'] else ''
                 d = datetime.datetime.strptime(entry["IssueDate"], "%Y-%m-%d")
                 card_item['airdate'] = d.isoformat()
@@ -241,7 +241,7 @@ class MylarSensor(Entity):
                                 if self.type == "detailed_history":
 
                                     issueid = entry['IssueID'] if 'IssueID' in entry.keys() else None
-                                    if issueid in cache.keys():
+                                    if issueid in cache.keys() and 'cachetime' in cache[issueid].keys() and (now - cache[issueid]['cachetime']).seconds < 3600:
                                         cvdata = cache[issueid]
                                     else:
                                         cvdata = get_cvdata(self.cvapikey, issueid=issueid)
@@ -260,7 +260,8 @@ class MylarSensor(Entity):
                 for entry in tempdata:
                     issueid = entry['IssueID'] if 'IssueID' in entry.keys() else None
                     if issueid:
-                        if issueid in cache.keys():
+                        if issueid in cache.keys() and 'cachetime' in cache[issueid].keys() and (
+                                now - cache[issueid]['cachetime']).seconds < 3600:
                             cvdata = cache[issueid]
                         else:
                             cvdata = get_cvdata(self.cvapikey, issueid=issueid)
@@ -269,7 +270,8 @@ class MylarSensor(Entity):
                         comicid = entry['ComicID']
                         issuenumber = entry['IssueNumber']
                         cvid = '%s|%s' % (comicid, issuenumber)
-                        if cvid in cache.keys():
+                        if cvid in cache.keys() and 'cachetime' in cache[cvid].keys() and (
+                                now - cache[cvid]['cachetime']).seconds < 3600:
                             cvdata = cache[cvid]
                         else:
                             cvdata = get_cvdata(self.cvapikey, volumeid=comicid, issuenumber=issuenumber)
