@@ -226,10 +226,10 @@ class MylarSensor(Entity):
                 cache = json.load(json_file)
 
         if res.status_code == 200:
+            now = datetime.datetime.now()
             if self.type in ["history", "detailed_history"]:
                 tempdata = res.json()['data']
                 self.data = []
-                now = datetime.datetime.now()
                 for entry in tempdata:
                     try:
                         d = datetime.datetime.strptime(entry["DateAdded"], "%Y-%m-%d %H:%M:%S")
@@ -241,10 +241,11 @@ class MylarSensor(Entity):
                                 if self.type == "detailed_history":
 
                                     issueid = entry['IssueID'] if 'IssueID' in entry.keys() else None
-                                    if issueid in cache.keys() and 'cachetime' in cache[issueid].keys() and (now - cache[issueid]['cachetime']).seconds < 3600:
+                                    if issueid in cache.keys() and 'cachetime' in cache[issueid].keys() and (now - datetime.datetime.strptime(cache[issueid]['cachetime'],'%Y-%m-%d %H:%M:%S.%f')).seconds < 3600:
                                         cvdata = cache[issueid]
                                     else:
                                         cvdata = get_cvdata(self.cvapikey, issueid=issueid)
+                                        cvdata['cachetime'] = now.__str__()
                                         cache[issueid] = cvdata
                                     entry['cvdata'] = cvdata
                                 self.data.append(entry)
@@ -260,21 +261,21 @@ class MylarSensor(Entity):
                 for entry in tempdata:
                     issueid = entry['IssueID'] if 'IssueID' in entry.keys() else None
                     if issueid:
-                        if issueid in cache.keys() and 'cachetime' in cache[issueid].keys() and (
-                                now - cache[issueid]['cachetime']).seconds < 3600:
+                        if issueid in cache.keys() and 'cachetime' in cache[issueid].keys() and (now - datetime.datetime.strptime(cache[issueid]['cachetime'],'%Y-%m-%d %H:%M:%S.%f')).seconds < 3600:
                             cvdata = cache[issueid]
                         else:
                             cvdata = get_cvdata(self.cvapikey, issueid=issueid)
+                            cvdata['cachetime'] = now.__str__()
                             cache[issueid] = cvdata
                     else:
                         comicid = entry['ComicID']
                         issuenumber = entry['IssueNumber']
                         cvid = '%s|%s' % (comicid, issuenumber)
-                        if cvid in cache.keys() and 'cachetime' in cache[cvid].keys() and (
-                                now - cache[cvid]['cachetime']).seconds < 3600:
+                        if cvid in cache.keys() and 'cachetime' in cache[cvid].keys() and (now - datetime.datetime.strptime(cache[cvid]['cachetime'],'%Y-%m-%d %H:%M:%S.%f')).seconds < 3600:
                             cvdata = cache[cvid]
                         else:
                             cvdata = get_cvdata(self.cvapikey, volumeid=comicid, issuenumber=issuenumber)
+                            cvdata['cachetime'] = now.__str__()
                             cache[cvid] = cvdata
                     entry['cvdata'] = cvdata
                     self.data.append(entry)
